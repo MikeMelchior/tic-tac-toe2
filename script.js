@@ -2,6 +2,10 @@ const gameBoard = (() => {
     
     let board = ['x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'];
 
+    const getBoard = () => {
+        return board;
+    }
+
     const addMove = (marker, index) => {
         board[index] = marker;
     };
@@ -13,8 +17,14 @@ const gameBoard = (() => {
     };
 
     return {
-        board,
+        getBoard,
         addMove,
         resetBoard,
     }
 })()
+
+const player = (name, marker) => {
+    this.name = name;
+    this.marker = marker;
+
+}
