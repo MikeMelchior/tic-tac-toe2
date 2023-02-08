@@ -14,3 +14,37 @@ html {
     background-color: silver;
 }
 
+.main {
+    display: grid;
+    height: 100%;
+    grid: 10% 1fr 5% / 1fr;
+}
+
+.content {
+    background-color: aquamarine;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+}
+
+    .board-container {
+        background-color: pink;
+        padding: 3rem;
+        display: grid;
+    }
+
+        .game-board {
+            place-self: center;
+            position: relative;
+            width: clamp(375px, 50vh, 500px);
+            height: clamp(375px, 50vh, 500px);
+            background-color: blue;
+            display: grid;
+            grid: 1fr 1fr 1fr / 1fr 1fr 1fr;
+        }
+
+        .square {
+            border: 1px solid black;
+            display: grid;
+            place-items: center;
+            font-size: 3em;
+        }
