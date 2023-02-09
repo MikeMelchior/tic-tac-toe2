@@ -63,20 +63,51 @@ const displayController = (() => {
     }
 
     const createScoreBoard = () => {
-
+            // scoreboard container
         const scoreboard = document.createElement('div');
         scoreboard.classList.add('score-board');
-
+            // scoreboard title
         const title = document.createElement('p');
         title.textContent = 'Scoreboard';
+            // create container for player names and scores
+        const scoresDiv = document.createElement('div');
+        scoresDiv.classList.add('scores-container');
+                // create separate containers for each player with default text
+            const playerOneContainer = document.createElement('div');
+            playerOneContainer.classList.add('player-one');
 
-        scoreboard.append(title);
+            const playOneName = document.createElement('div');
+            playOneName.textContent = 'Player One';
+            const playOneScore = document.createElement('div');
+            playOneScore.textContent = '0';
+
+            playerOneContainer.append(playOneName, playOneScore);
+
+            const playerTwoContainer = document.createElement('div');
+            playerTwoContainer.classList.add('player-two');
+
+            const playerTwoName = document.createElement('div');
+            playerTwoName.textContent = 'Player Two';
+            const playerTwoScore = document.createElement('div');
+            playerTwoScore.textContent = '0';
+
+            playerTwoContainer.append(playerTwoName, playerTwoScore);
+            
+        scoresDiv.append(playerOneContainer, playerTwoContainer);
+
+        scoreboard.append(title, scoresDiv);
         content.appendChild(scoreboard);
     }
 
-    const createNewGameWindow = () => {
+    const createNewWindow = (className) => {
         const window = document.createElement('div');
-        window.classList.add('new-game-window');
+        window.classList.add('window',className);
+
+        return window;
+    }
+
+    const createNewGameWindow = () => {
+        const window = createNewWindow('new-game-window')
 
         const para = document.createElement('p');
         para.textContent = 'New Game';
@@ -95,12 +126,51 @@ const displayController = (() => {
 
     const toggleNewGameWindow = () => {
         document.querySelector('.new-game-window').classList.toggle('hidden');
+    }
 
+    const createNameSelectWindow = () => {
+        const nameSelectWindow = createNewWindow('name-select-window');
+        // nameSelectWindow.classList.add('hidden');
+
+            //create for for name input
+        const form = document.createElement('form');
+
+        const labelOne = document.createElement('label');
+        labelOne.htmlFor = 'PlayOneName';
+        labelOne.innerHTML = 'Player One Name:';
+
+        const inputOne = document.createElement('input');
+        inputOne.type = 'text';
+        inputOne.name = 'PlayOneName';
+        inputOne.id = 'PlayOneName';
+
+        const labelTwo = document.createElement('label');
+        labelTwo.htmlFor = 'PlayTwoName';
+        labelTwo.innerHTML = 'Player Two Name:';
+
+        const inputTwo = document.createElement('input');
+        inputTwo.type = 'text';
+        inputTwo.name = 'PlayTwoName';
+        inputTwo.id = 'PlayTwoName';
+
+        form.append(labelOne, inputOne, labelTwo, inputTwo)
+
+        const buttonContainer = document.createElement('div');
+        const startButton = document.createElement('button');
+        startButton.textContent = 'Start Game';
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'Cancel';
+
+        buttonContainer.append(startButton, cancelButton);
+
+        nameSelectWindow.append(form, buttonContainer)
+        main.appendChild(nameSelectWindow);
     }
 
     createBoard();
     createScoreBoard();
     createNewGameWindow();
+    createNameSelectWindow();
 
     return {
         toggleNewGameWindow
@@ -165,7 +235,11 @@ const game = (() => {
     }
 
     const winGame = () => {
-        alert('You win!');
+        if (marker === 'x') {
+            alert('Player one wins!');
+        } else {
+            alert('Player two wins!')
+        }
     }
 
     const tieGame = () => {
