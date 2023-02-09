@@ -77,8 +77,10 @@ const displayController = (() => {
             playerOneContainer.classList.add('player-one');
 
             const playOneName = document.createElement('div');
+            playOneName.classList.add('player-one-name');
             playOneName.textContent = 'Player One';
             const playOneScore = document.createElement('div');
+            playOneScore.classList.add('player-one-score')
             playOneScore.textContent = '0';
 
             playerOneContainer.append(playOneName, playOneScore);
@@ -87,8 +89,10 @@ const displayController = (() => {
             playerTwoContainer.classList.add('player-two');
 
             const playerTwoName = document.createElement('div');
+            playerTwoName.classList.add('player-two-name')
             playerTwoName.textContent = 'Player Two';
             const playerTwoScore = document.createElement('div');
+            playerTwoScore.classList.add('player-two-score')
             playerTwoScore.textContent = '0';
 
             playerTwoContainer.append(playerTwoName, playerTwoScore);
@@ -130,7 +134,7 @@ const displayController = (() => {
 
     const createNameSelectWindow = () => {
         const nameSelectWindow = createNewWindow('name-select-window');
-        // nameSelectWindow.classList.add('hidden');
+        nameSelectWindow.classList.add('hidden');
 
             //create for for name input
         const form = document.createElement('form');
@@ -157,14 +161,17 @@ const displayController = (() => {
 
         const buttonContainer = document.createElement('div');
         const startButton = document.createElement('button');
+        startButton.classList.add('start-button');
         startButton.textContent = 'Start Game';
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = 'Cancel';
 
-        buttonContainer.append(startButton, cancelButton);
+        buttonContainer.append(startButton);
 
         nameSelectWindow.append(form, buttonContainer)
         main.appendChild(nameSelectWindow);
+    }
+
+    const toggleNameSelectWindow = () => {
+        document.querySelector('.name-select-window').classList.toggle('hidden');
     }
 
     createBoard();
@@ -173,7 +180,8 @@ const displayController = (() => {
     createNameSelectWindow();
 
     return {
-        toggleNewGameWindow
+        toggleNewGameWindow,
+        toggleNameSelectWindow
     }
 })()
 
@@ -182,12 +190,23 @@ const game = (() => {
 
     let gameMode = null;
     let marker = null;
+    let playerOne = null;
+    let playerTwo = null;
 
     const oMarker = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11,7A2,2 0 0,0 9,9V15A2,2 0 0,0 11,17H13A2,2 0 0,0 15,15V9A2,2 0 0,0 13,7H11M11,9H13V15H11V9Z" /></svg>`
     const xMarker = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9,7L11,12L9,17H11L12,14.5L13,17H15L13,12L15,7H13L12,9.5L11,7H9Z" /></svg>`
     let currentMarker = null
 
+    const setPlayers = () => {
+        game.playerOne = Player(document.querySelector('#PlayOneName').value);
+        document.querySelector('.player-one-name').textContent = game.playerOne.name;
+        game.playerTwo = Player(document.querySelector('#PlayTwoName').value);
+        document.querySelector('.player-two-name').textContent = game.playerTwo.name;
+    }    
+
     const newGame = () => {
+        gameBoard.resetBoard();
+        
         document.querySelectorAll('.square').forEach((square) => {
             square.textContent = '';
             let newSquare = square.cloneNode(true);
@@ -231,14 +250,19 @@ const game = (() => {
         if (gameBoard.getBoard().indexOf('') === -1) {
             tieGame();
             newGame();
+            return
         }
     }
 
     const winGame = () => {
         if (marker === 'x') {
-            alert('Player one wins!');
+            alert(`${game.playerOne.name} wins!`);
+            game.playerOne.incrementScore();
+            document.querySelector('.player-one-score').textContent = game.playerOne.getScore();
         } else {
-            alert('Player two wins!')
+            alert(`${game.playerTwo.name} wins!`)
+            game.playerTwo.incrementScore();
+            document.querySelector('.player-two-score').textContent = game.playerTwo.getScore();
         }
     }
 
@@ -270,15 +294,23 @@ const game = (() => {
 
     document.querySelector('.multiplayer').addEventListener('click', () => {
         setGameMode('multiplayer');
-        newGame();
         displayController.toggleNewGameWindow();
+        displayController.toggleNameSelectWindow();
     })
 
     document.querySelector('.vs-computer').addEventListener('click', () => {
         alert('Coming Soon!');
     })
 
+    document.querySelector('.start-button').addEventListener('click', () => {
+        setPlayers();
+        displayController.toggleNameSelectWindow();
+        newGame();
+    })
+
     return {
+        playerOne,
+        playerTwo
     }
 })()
 
