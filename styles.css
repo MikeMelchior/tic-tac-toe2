@@ -1,17 +1,19 @@
 * {
     margin: 0;
     box-sizing: border-box;
+    font-family: monospace, 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 :root {
-    --varname: var(--name);
+    --fit: clamp(375px, 60vh, 500px);
+    --smallFit: clamp(325px, 60vh, 500px)
 }
 
 body,
 html {
     height: 100%;
     min-height: 100vh;
-    background-color: silver;
+    background-color: rgb(245, 245, 245);
 }
 
 .main {
@@ -20,31 +22,155 @@ html {
     grid: 10% 1fr 5% / 1fr;
 }
 
-.content {
-    background-color: aquamarine;
+.header {
+    place-self: center;
+    font-size: 2rem;
+}
+
+.window {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: silver;
+    height: var(--fit);
+    width: var(--fit);
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    padding: 1rem;
+    gap: 1rem;
+    border: 10px ridge darkslategray;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+
 }
 
     .board-container {
         background-color: pink;
-        padding: 3rem;
         display: grid;
     }
 
         .game-board {
             place-self: center;
             position: relative;
-            width: clamp(375px, 50vh, 500px);
-            height: clamp(375px, 50vh, 500px);
-            background-color: blue;
+            width: var(--smallFit);
+            height: var(--smallFit);
+            background-color: rgb(245, 245, 245);
             display: grid;
             grid: 1fr 1fr 1fr / 1fr 1fr 1fr;
         }
 
         .square {
             border: 1px solid black;
+            background-color: rgb(210, 250, 235);
             display: grid;
             place-items: center;
             font-size: 3em;
         }
+
+    .score-board {
+        background-color: #7fffd4;
+        display: grid;
+        grid: auto 1fr / 1fr;
+        border: 2rem ridge silver;
+    }
+
+        .score-board > p {
+            font-size: 40px;
+            place-self: center;
+        }
+
+        .scores-container {
+            justify-self: stretch;
+            background-color: rgb(245, 245, 245);
+            display: grid;
+            grid: 1fr / 1fr 1fr;
+            border: 2rem solid aquamarine;
+        }
+
+        .scores-container > div {
+            display: grid;
+            grid: 1fr 1fr / 1fr;
+        }
+
+            .scores-container div div {
+                border: 1px solid;
+                place-self: stretch;
+                display: grid;
+                place-items: center;
+                font-size: 2rem;
+                text-align: center;
+            }
+
+.new-game-window {
+    grid: 2fr 1fr / 1fr 1fr;
+}
+    .new-game-window p {
+        grid-area: 1 / 1 / 2 / 3;
+        place-self: center;
+        font-size: 4em;
+    }
+
+    .new-game-window button {
+        justify-self: stretch;
+        border-radius: 20px;
+        font-size: 25px;
+    }
+
+    .vs-computer {
+        opacity: 0.7;
+    }
+
+
+.name-select-window {
+    display: grid;
+    grid: 60% 40% / 1fr
+}
+
+    .name-select-window form{
+        display: grid;
+        grid: 1fr 1fr 1fr 1fr / 1fr;
+    }
+
+    .name-select-window label {
+        place-self: center;
+        font-size: 1.5rem;
+    }
+
+    .name-select-window input {
+        border-radius: 10px;
+        font-size: 1.3rem;
+        color: red;
+    }
+
+    .name-select-window > div {
+        display: grid;
+        grid: 1fr / 1fr 1fr;
+        place-items: center;
+    }
+
+    .name-select-window button {
+        width: 100%;
+        padding: 1rem 0;
+        font-size: 1.4rem;
+        background-color: gray;
+    }
+
+    .name-select-window button:first-child {
+        background-color: #BADA55;
+    }
+
+
+.hidden {
+    opacity: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.un-clickable {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
