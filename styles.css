@@ -147,7 +147,6 @@ html {
 
     .name-select-window > div {
         display: grid;
-        grid: 1fr / 1fr 1fr;
         place-items: center;
     }
 
@@ -155,10 +154,7 @@ html {
         width: 100%;
         padding: 1rem 0;
         font-size: 1.4rem;
-        background-color: gray;
-    }
-
-    .name-select-window button:first-child {
+        border-radius: 10px;
         background-color: #BADA55;
     }
 
