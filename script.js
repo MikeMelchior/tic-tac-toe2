@@ -25,14 +25,21 @@ const gameBoard = (() => {
     }
 })()
 
-const player = (name, marker) => {
-    this.name = name;
-    this.marker = marker;
+const Player = (name) => {
+    let score = 0;
+    this.incrementScore = () => {
+        score++
+    }
+    this.getScore = () => {
+        return score;
+    }
+    return {name, incrementScore, getScore}
 }
 
 const displayController = (() => {
 
-    const content = document.querySelector('.content')
+    const main = document.querySelector('.main');
+    const content = document.querySelector('.content');
     const boardContainer = document.querySelector('.board-container');
 
     const createBoard = () => {
@@ -59,14 +66,44 @@ const displayController = (() => {
 
         const scoreboard = document.createElement('div');
         scoreboard.classList.add('score-board');
-        scoreboard.textContent = 'Scoreboard';
 
+        const title = document.createElement('p');
+        title.textContent = 'Scoreboard';
+
+        scoreboard.append(title);
         content.appendChild(scoreboard);
     }
 
+    const createNewGameWindow = () => {
+        const window = document.createElement('div');
+        window.classList.add('new-game-window');
+
+        const para = document.createElement('p');
+        para.textContent = 'New Game';
+
+        const button = document.createElement('button');
+        button.classList.add('multiplayer');
+        button.textContent = 'Multiplayer';
+
+        const buttonTwo = document.createElement('button');
+        buttonTwo.classList.add('vs-computer');
+        buttonTwo.textContent = 'Vs. Computer';
+
+        window.append(para, button, buttonTwo);
+        main.appendChild(window);
+    }
+
+    const toggleNewGameWindow = () => {
+        document.querySelector('.new-game-window').classList.toggle('hidden');
+
+    }
+
+    createBoard();
+    createScoreBoard();
+    createNewGameWindow();
+
     return {
-        createBoard,
-        createScoreBoard
+        toggleNewGameWindow
     }
 })()
 
@@ -85,8 +122,11 @@ const game = (() => {
             square.textContent = '';
             let newSquare = square.cloneNode(true);
             square.parentNode.replaceChild(newSquare, square);
-
         })
+
+        if (getGameMode() === 'multiplayer') {
+            multiplayerGame();
+        }
     }
 
     const setGameMode = (mode) => {
@@ -116,54 +156,57 @@ const game = (() => {
             ) {
                 winGame();
                 newGame();
+                return
             }
+        if (gameBoard.getBoard().indexOf('') === -1) {
+            tieGame();
+            newGame();
+        }
     }
 
     const winGame = () => {
         alert('You win!');
     }
 
-    const multiplayerGame = () => {
-        
+    const tieGame = () => {
+        alert("It's a tie!")
+    }
 
+    const multiplayerGame = () => {
+        setGameMode('multiplayer');
         document.querySelectorAll('.square').forEach((square) => {
             square.addEventListener('click', (e) => {
                     // if square has been played return
-                if (e.target.textContent !== '') return
-
-                getMarker();
-                    // update board object
-                gameBoard.addMove(marker, e.target.classList[0])
-                    //display marker svg
-                e.target.innerHTML = currentMarker;
-
-                
-                
-
-
-
-                    // and check for win and set timeout to allow winning marker to display
-                setTimeout(() => {
-                    checkForWin();
-                }, 1);
-                
+                if (e.target.textContent !== '') {
+                    return 
+                } else {
+                    getMarker();
+                        // update board object
+                    gameBoard.addMove(marker, e.target.classList[0])
+                        //display marker svg
+                    e.target.innerHTML = currentMarker;
+                        // and check for win and set timeout to allow winning marker to display
+                    setTimeout(() => {
+                        checkForWin();
+                    }, 1);
+                }
             })
         })
     }
 
+    document.querySelector('.multiplayer').addEventListener('click', () => {
+        setGameMode('multiplayer');
+        newGame();
+        displayController.toggleNewGameWindow();
+    })
+
+    document.querySelector('.vs-computer').addEventListener('click', () => {
+        alert('Coming Soon!');
+    })
+
     return {
-        newGame,
-        multiplayerGame
     }
 })()
 
-
-
-
-
-displayController.createBoard();
-displayController.createScoreBoard();
-
-game.multiplayerGame();
 
 
